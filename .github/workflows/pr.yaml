@@ -34,13 +34,20 @@ jobs:
         push: true
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo:pr-${{ github.event.pull_request.number }}
-    - name: Create a cluster
+    - 
+      name: Create a cluster
       uses: AbsaOSS/k3d-action@v2
       with:
         cluster-name: test
         args: >-
           --config k3d.yaml
-    - name: Deploy the app
+    -
+      name: Get Cluster info
+      run: |
+        kubectl get nodes -o wide
+        kubectl get all -A -o wide
+    - 
+      name: Deploy the app
       run: |
         cd kustomize/overlays/preview
         kustomize edit set image ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo=${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo:pr-${{ github.event.pull_request.number }}
