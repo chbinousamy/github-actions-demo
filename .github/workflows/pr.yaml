@@ -44,7 +44,9 @@ jobs:
     -
       name: Get Cluster info
       run: |
+        kubectl wait pod --all --for=condition=Ready
         kubectl config view
+        echo "read config file"
         cat $HOME/.kube/config
         kubectl get nodes -o wide
         kubectl get all -A -o wide
